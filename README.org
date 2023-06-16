@@ -5,10 +5,9 @@
 A cpp repl for dimension analysis of units of measurement.
 
 ** building
-
-```bash
+#+BEGIN_SRC bash
 mkdir build
 cd build
 cmake ..
 make
-```
+#+END_SRC
