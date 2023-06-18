@@ -12,7 +12,7 @@ void System::addDimension(Dimension* dim){
     dimensions[dim->getName()] = dim;   
 }
 
-void SysUnit::addDim(Dimension* dim, DimUnit* unit = nullptr, const int power = 0) {
+void SysUnit::addDim(Dimension* dim, DimUnit* unit, const int power) {
     auto name = dim->name;
     dimensions.insert({name, dim});
     power_matrix.insert({name, power});
