@@ -22,7 +22,6 @@ class DimUnit {
 
     std::function<double(double)> to_conversion_formula;
     std::function<double(double)> from_conversion_formula;
-    private:
     std::string name;
     std::string symbol;
 };
@@ -43,8 +42,7 @@ public:
     const std::string& getName() const { return name; }
     const std::map<std::string, DimUnit>& getUnits() const { return units; }
     const std::string& getBaseUnit() const { return base_unit; }
-
-private:
+    
     std::string name;
     std::map<std::string, DimUnit> units; // access key is the unit name
     std::string base_unit;

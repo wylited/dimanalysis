@@ -1,6 +1,6 @@
-#include "dimension.hpp"
 #include <stdexcept>
 #include <cmath>
+#include "dimension.hpp"
 
 void Dimension::addUnit(const DimUnit& unit) {
     // check if unit is already in this dimension
