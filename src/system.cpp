@@ -8,8 +8,17 @@ void System::addDimension(Dimension* dim){
         throw std::invalid_argument("dimension is already in the system");
     }
 
-    // add dimension to the system
-    dimensions[dim->getName()] = dim;   
+    dimensions[dim->getName()] = dim;
+
+    for(auto unit : units) {
+        unit->addDim(dim);
+    }
+}
+
+void System::addDimensions(std::vector<Dimension*> dimensions) {
+    for (auto& dim : dimensions) {
+        addDimension(dim);
+    }
 }
 
 void SysUnit::addDim(Dimension* dim, DimUnit* unit, const int power) {
@@ -18,12 +27,12 @@ void SysUnit::addDim(Dimension* dim, DimUnit* unit, const int power) {
     power_matrix.insert({name, power});
     if (unit != nullptr) {
         // check if DimUnit is a valid unit of the dimension
-        if (dim->units.find(dim->getBaseUnit()) == dim->units.end()) {
+        if (dim->units.find(dim->base_unit) == dim->units.end()) {
             throw std::invalid_argument("unit is not in dimension");
         }
         dim_units.insert({name, unit});
     } else {
-        dim_units.insert({name, &dim->units.at(dim->getBaseUnit())});
+        dim_units.insert({name, &dim->units.at(dim->base_unit)});
     }
 }
 
@@ -50,4 +59,14 @@ void SysUnit::updateDim(Dimension *dim, DimUnit *unit, const int power) {
     }
     dim_units.at(name) = unit;
     power_matrix.at(name) = power;
+}
+
+void SysUnit::updateVals(std::unordered_map<std::string, Dimension *> dDimensions) {
+    for (auto& dim : dDimensions) {
+        auto name = dim.first;
+
+        if (dimensions.find(name) != dimensions.end()) {
+            addDim(dim.second);
+        }
+    }
 }

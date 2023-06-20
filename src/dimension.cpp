@@ -12,6 +12,15 @@ void Dimension::addUnit(const DimUnit& unit) {
     units[unit.getName()] = unit;
 }
 
+void Dimension::addBaseUnit(const std::string& unit_name, const std::string& unit_symbol) {
+    if (units.find(unit_name) != units.end()) {
+        throw std::invalid_argument("unit is already in this dimension, use setBaseUnit");
+    }
+    units[unit_name] = DimUnit(unit_name, unit_symbol, [](double value) { return value; }, [](double value) { return value; });
+    base_unit = unit_name;
+}
+
+
 void Dimension::setBaseUnit(const std::string& unit_name) {
     if (units.find(unit_name) == units.end()) {
         throw std::invalid_argument("unit is not in this dimension");

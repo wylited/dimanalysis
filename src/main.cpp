@@ -1,32 +1,24 @@
 #include "dimension.hpp"
+#include "system.hpp"
 #include <iostream>
 
 int main() {
-	// Create a new dimension for temperature and add Celsius and Fahrenheit units
-	Dimension temperature("Temperature");
+	System standard;
 
-	temperature.addUnit(DimUnit("Celsius", "°C",
-			[](double value) { return value + 273.15; }, 
-			[](double value) { return value - 273.15; }
-	));
+	Dimension time("Time", "Second", "s");
+	Dimension length("Length", "Meter", "m");
+	Dimension mass("Mass", "Kilogram", "kg");
+	Dimension current("Eletric Current", "Ampere", "A");
+	Dimension temperature("Thermodynamic Temperature", "Kelvin", "K");
+	Dimension amount("Amount of Substance", "Mole", "mol");
+	Dimension luminous("Luminous Intensity", "Candela", "cd");
 
-	temperature.addUnit(DimUnit("Fahrenheit", "°F", 
-			[](double value) { return (value - 32.0) * 5.0 / 9.0 + 273.15; },
-			[](double value) { return (value - 273.15) * (9.0 / 5.0) + 32.0; }
-	));
+	standard.addDimensions({&time, &length, &mass, &current, &temperature, &amount, &luminous});
 
-	temperature.addUnit(DimUnit("Kelvin", "K", 
-			[](double value) { return value; },
-			[](double value) { return value; }
-	));
+	SysUnit velocity("Velocity", "m/s", {length.getBaseUnit(), time.getBaseUnit()}, {1, -1});
 
-	temperature.setBaseUnit("Kelvin");
-
-	// Convert 0 degrees Celsius to Kelvin
-	std::cout << temperature.convert(0, "Celsius", "Kelvin") << std::endl;
-	
-	// convert 0 degrees Kelvin to Fahrenheit
-	std::cout << temperature.convert(0, "Kelvin", "Fahrenheit") << std::endl;
+	// SysUnit power("Watt", "W", {mass.getBaseUnit(), length.getBaseUnit(), time.getBaseUnit()}, {1, 2, -2});
+	// standard.addUnit(&power); 
 
 	return 0;
 }
