@@ -15,10 +15,7 @@ int main() {
 
 	standard.addDimensions({&time, &length, &mass, &current, &temperature, &amount, &luminous});
 
-	SysUnit velocity("Velocity", "m/s", {length.getBaseUnit(), time.getBaseUnit()}, {1, -1});
-
-	// SysUnit power("Watt", "W", {mass.getBaseUnit(), length.getBaseUnit(), time.getBaseUnit()}, {1, 2, -2});
-	// standard.addUnit(&power); 
+	standard.addUnit("Velocity", "m/s", {{"Length", "Meter"}, {"Time", "Second"}}, {1, -1, 0, 0, 0, 0, 0});
 
 	return 0;
 }

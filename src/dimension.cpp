@@ -2,53 +2,50 @@
 #include <cmath>
 #include "dimension.hpp"
 
-void Dimension::addUnit(const DimUnit& unit) {
-    // check if unit is already in this dimension
-    if (units.find(unit.getName()) != units.end()) {
-        throw std::invalid_argument("unit is already in this dimension");
-    }
-
-    // add unit to this dimension
-    units[unit.getName()] = unit;
-}
-
-void Dimension::addBaseUnit(const std::string& unit_name, const std::string& unit_symbol) {
-    if (units.find(unit_name) != units.end()) {
+void Dimension::newUnit(const std::string& name,
+                 const std::string& symbol,
+                 std::function<double(double)> to, 
+                 std::function<double(double)> from) {
+    if (!checkPresence({name})) {
         throw std::invalid_argument("unit is already in this dimension, use setBaseUnit");
     }
-    units[unit_name] = DimUnit(unit_name, unit_symbol, [](double value) { return value; }, [](double value) { return value; });
-    base_unit = unit_name;
+    units[name] = symbol;
+    conversion_formulae[name] = std::make_tuple(to, from);
+}
+
+void Dimension::newBaseUnit(const std::string& name, const std::string& symbol) {
+    if (!checkPresence({name})) {
+        throw std::invalid_argument("unit is already in this dimension, use setBaseUnit");
+    }
+    units[name] = symbol;
 }
 
 
-void Dimension::setBaseUnit(const std::string& unit_name) {
-    if (units.find(unit_name) == units.end()) {
-        throw std::invalid_argument("unit is not in this dimension");
+void Dimension::setBaseUnit(const std::string& name) {
+    if (!checkPresence({name})) {
+        throw std::invalid_argument("unit is already in this dimension, use setBaseUnit");
     } else {
-        base_unit = unit_name;
+        base_unit = name;
     }
 }
 
 double Dimension::convert(double value, const std::string& from_unit, const std::string& to_unit) {
     // check if units are in this dimension
-    if (units.find(from_unit) == units.end() || units.find(to_unit) == units.end()) {
-        throw std::invalid_argument("units are not in this dimension");
-    }
+    if (!checkPresence({from_unit, to_unit})) {
+        throw std::invalid_argument("unit is already in this dimension, use setBaseUnit");
+    } 
 
-    // check if units are the same
     if (from_unit == to_unit) {
         return value;
-    }
-    
-    // check if units are the base unit
-    if (from_unit == base_unit) {
-        return units[to_unit].from_conversion_formula(value);
+    } 
+
+    if (from_unit == base_unit) { // check if units are the base unit
+        return std::get<0>(conversion_formulae[to_unit])(value);
     } else if (to_unit == base_unit) {
-        return units[from_unit].to_conversion_formula(value);
+        return std::get<0>(conversion_formulae[from_unit])(value);
     }
 
     // convert to base unit first
-    double base_value = units[from_unit].to_conversion_formula(value);
-    // return converted value
-    return units[to_unit].from_conversion_formula(base_value);
+    double base_value = std::get<0>(conversion_formulae[from_unit])(value);
+    return std::get<1>(conversion_formulae[to_unit])(base_value);
 }
