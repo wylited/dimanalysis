@@ -21,10 +21,9 @@ void System::addUnit(std::string name, std::string symbol, std::unordered_map<st
     }
 
     for (const auto &[dim, unit] : dim_units) {
-        // if (dims.find(dim) != dims.end()) {
-        //     throw std::invalid_argument("Dimension " + dim + " is not in the system");
-        // } else 
-        if (dims[dim]->units.find(unit) == dims[dim]->units.end()) {
+        if (dims.find(dim) == dims.end()) {
+            throw std::invalid_argument("Dimension " + dim + " is not in the system");
+        } else  if (dims[dim]->units.find(unit) == dims[dim]->units.end()) {
             throw std::invalid_argument("unit is not in the dimension");
         }
     }

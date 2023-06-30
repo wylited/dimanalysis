@@ -15,7 +15,7 @@ int main() {
 
 	standard.addDimensions({&time, &length, &mass, &current, &temperature, &amount, &luminous});
 
-	standard.addUnit("Velocity", "m/s", {{"Length", "Meter"}, {"Time", "Second"}}, {1, -1, 0, 0, 0, 0, 0});
+	standard.addUnit("Power", "W", {{"Time", "Second"}, {"Length", "Meter"}, {"Mass", "Kilogram"}}, {2, -3, 1, 0, 0, 0, 0});
 
 	return 0;
 }
