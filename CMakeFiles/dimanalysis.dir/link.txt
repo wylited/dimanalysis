@@ -1,0 +1,1 @@
+/usr/bin/c++ -rdynamic CMakeFiles/dimanalysis.dir/src/main.cpp.o CMakeFiles/dimanalysis.dir/src/dimension.cpp.o CMakeFiles/dimanalysis.dir/src/system.cpp.o -o dimanalysis 

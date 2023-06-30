@@ -1,0 +1,3 @@
+/home/wyli/Repos/dimanalysis/CMakeFiles/dimanalysis.dir
+/home/wyli/Repos/dimanalysis/CMakeFiles/edit_cache.dir
+/home/wyli/Repos/dimanalysis/CMakeFiles/rebuild_cache.dir
